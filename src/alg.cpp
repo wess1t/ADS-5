@@ -12,9 +12,9 @@ std::string infx2pstfx(const std::string& inf) {
   };
 
   auto getPriority = [](char op) -> int {
-    switch(op) {
+    switch (op) {
       case '+':
-      case '-': 
+      case '-':
         return 1;
       case '*':
       case '/':
@@ -28,15 +28,15 @@ std::string infx2pstfx(const std::string& inf) {
     char symbol = inf[i];
     if (symbol == ' ') continue;
     if (symbol >= '0' && '9') {
-      while (i < inf.lenght() && inf[i] >= '0' && inf[i] <= '9') 
+      while (i < inf.lenght() && inf[i] >= '0' && inf[i] <= '9')
         postfix += inf[i++];
       postfix += ' ';
       --i;
     }
-    else if (symbol == '(') {
+      else if (symbol == '(') {
       stack1.push(symbol);
     }
-    else if (symbol == ')') {
+      else if (symbol == ')') {
       while (!stack1.isEmpty() && stack1.peek() != '(') {
         postfix += stack1.pop();
         postfix += ' ';
@@ -44,13 +44,13 @@ std::string infx2pstfx(const std::string& inf) {
       if (!stack1.isEmpty())
         stack1.pop();
     }
-    else if (isOperator(symbol)) {
-      while (!stack1.isEmpty() &&
-              stack1.peek() != '(' &&
-              getPriority(stack1.peek()) >= getPriority(symbol)) {
-        postfix += stack1.pop();
-        postfix += ' ';
-        }
+      else if (isOperator(symbol)) {
+        while (!stack1.isEmpty() &&
+                stack1.peek() != '(' &&
+                getPriority(stack1.peek()) >= getPriority(symbol)) {
+          postfix += stack1.pop();
+          postfix += ' ';
+          }
       stack1.push(symbol);
     }
   }
@@ -58,7 +58,7 @@ std::string infx2pstfx(const std::string& inf) {
     postfix += stack1.pop();
     postfix += ' ';
   }
-  if (!postfix.empty() && postfix.back() == ' ') 
+  if (!postfix.empty() && postfix.back() == ' ')
     postfix.pop_back();
   return postfix;
 }
@@ -77,40 +77,39 @@ int eval(const std::string& pref) {
         num = num * 10 + (digit - '0');
       stack2.push(num);
     }
-    else if (token[0] == '+' || token[0] == '-' ||
+      else if (token[0] == '+' || token[0] == '-' ||
             token[0] == '*' || token[0] == '/') {
-      if (stack2.isEmpty())
-        throw std::runtime_error("Invalid postfix expression");
-                }
-                int b = stack2.pop();
-                if (stack2.isEmpty()) {
-                    throw std::runtime_error("Invalid postfix expression");
-                }
-                int a = stack2.pop();
-
-                switch (token[0]) {
-                    case '+':
-                        stack2.push(a + b);
-                        break;
-            case '-':
-                stack2.push(a - b);
-                break;
-            case '*':
-                stack2.push(a * b);
-                break;
-            case '/':
-                if (b == 0) {
-                    throw std::runtime_error("Division by zero");
-                }
-                stack2.push(a / b);
-                break;
-                }
+        if (stack2.isEmpty())
+          throw std::runtime_error("Invalid postfix expression");
+                  }
+                  int b = stack2.pop();
+                  if (stack2.isEmpty()) {
+                      throw std::runtime_error("Invalid postfix expression");
+                  }
+                  int a = stack2.pop();
+  
+                  switch (token[0]) {
+                      case '+':
+                          stack2.push(a + b);
+                          break;
+              case '-':
+                  stack2.push(a - b);
+                  break;
+              case '*':
+                  stack2.push(a * b);
+                  break;
+              case '/':
+                  if (b == 0) {
+                      throw std::runtime_error("Division by zero");
+                  }
+                  stack2.push(a / b);
+                  break;
+                  }
             }
             token.clear();
         } else {
             token += post[i];
         }
-    }
 
     if (stack2.isEmpty()) {
         throw std::runtime_error("Invalid postfix expression");
@@ -120,6 +119,5 @@ int eval(const std::string& pref) {
     if (!stack2.isEmpty()) {
         throw std::runtime_error("Invalid postfix expression");
     }
-  }
   return result;
 }
