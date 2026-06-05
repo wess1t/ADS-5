@@ -23,80 +23,97 @@ bool isOperator(char c) {
 
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> operators;
-  std::string res;
-
+  std::string result;
+  
   for (size_t i = 0; i < inf.length(); i++) {
     char c = inf[i];
+    
     if (c == ' ')
       continue;
+      
     if (isdigit(c)) {
       while (i < inf.length() && isdigit(inf[i])) {
-        res += inf[i];
+        result += inf[i];
         i++;
       }
-      res += ' ';
+      result += ' ';
       i--;
-    } else if (c == '(') {
+    }
+    else if (c == '(') {
       operators.push(c);
-    } else if (c == ')') {
+    }
+    else if (c == ')') {
       while (!operators.empty() && operators.top() != '(') {
-        res += operators.pop();
-        res += ' ';
+        result += operators.pop();
+        result += ' ';
       }
-      if (!operators.empty() && operators.top() == '(')
+      if (!operators.empty() && operators.top() == '(') {
         operators.pop();
-    } else if (isOperator(c)) {
-      while (!operators.empty() && operators.top() != '(' &&
-        getPriority(operators.top()) >= getPriority(c)) {
-        res += operator.pop();
-        res += ' ';
-        }
+      }
+    }
+    else if (isOperator(c)) {
+      while (!operators.empty() && operators.top() != '(' && 
+             getPriority(operators.top()) >= getPriority(c)) {
+        result += operators.pop();
+        result += ' ';
+      }
       operators.push(c);
     }
   }
-  while (!oprators.empty()) {
-    res += operators.pop();
-    res += ' ';
+  
+  while (!operators.empty()) {
+    result += operators.pop();
+    result += ' ';
   }
-  if (!res.empty() && res.back() == ' ')
-    res.pop_back();
-  return res;
+
+  if (!result.empty() && result.back() == ' ')
+    result.pop_back();
+  
+  return result;
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& post) {
   TStack<int, 100> operands;
+  
   for (size_t i = 0; i < post.length(); i++) {
     char c = post[i];
+    
     if (c == ' ')
       continue;
+    
     if (isdigit(c)) {
-      int num = 0;
+      int number = 0;
       while (i < post.length() && isdigit(post[i])) {
-        num = num * 10 + (post[i] - '0');
+        number = number * 10 + (post[i] - '0');
         i++;
       }
-      operands.push(num);
+      operands.push(number);
       i--;
-    } else if (isOperator(c)) {
-      if (operands.size() >= 2) {
-        int a = operands.pop(), b = operands.pop(), res = 0;
+    }
+    else if (isOperator(c)) {
+      if (operands.getSize() >= 2) {
+        int b = operands.pop();
+        int a = operands.pop();
+        int result = 0;
+        
         switch (c) {
           case '+':
-            res = a + b;
+            result = a + b;
             break;
           case '-':
-            res = a - b;
+            result = a - b;
             break;
           case '*':
-            res = a * b;
+            result = a * b;
             break;
           case '/':
-            res = a / b;
+            result = a / b;
             break;
         }
-        operands.push(res);
+        operands.push(result);
       }
     }
   }
+  
   return operands.pop();
 }
