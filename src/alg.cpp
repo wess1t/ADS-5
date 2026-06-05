@@ -79,7 +79,7 @@ int eval(const std::string& pref) {
       i--;
     } else if (isOperator(c)) {
       if (operands.size() >= 2) {
-        int a = a = operands.pop(), b = operands.pop(), res = 0;
+        int a = operands.pop(), b = operands.pop(), res = 0;
         switch (c) {
           case '+':
             res = a + b;
