@@ -4,6 +4,7 @@
 
 template<typename T, int size>
 class TStack {
+
 private:
   T data[size];
   int top_i;
